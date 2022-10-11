@@ -1,0 +1,67 @@
+.todoContainer {
+  margin: 5% 33% auto;
+  width: 50%;
+
+  h1 {
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .todoForm input {
+    width: 50%;
+    margin: 30px 15px 20px 0;
+    height: 50px;
+    font-size: 25px;
+    border: 1px solid rgb(90, 188, 94);
+    border-radius: 5px;
+  }
+
+  .todoForm button {
+    height: 49px;
+    font-size: 25px;
+    border: 1px solid rgb(90, 188, 94);
+    border-radius: 5px;
+    background-color: rgb(90, 188, 94);
+    color: #ffffff;
+    letter-spacing: 0px;
+  }
+
+  .lists {
+    width: 100%;
+    list-style: none;
+    margin-top: 30px;
+
+    .list {
+      display: flex;
+      align-items: center;
+      column-gap: 16px;
+      margin: 30px 0 0 0;
+      font-size: 30px;
+
+      .listBtns {
+        display: flex;
+        column-gap: 5px;
+        margin-left: 10px;
+        border-radius: 13px;
+        border: none;
+
+        button {
+          border-radius: 5px;
+          border: 0.5px solid #a9a9a9;
+          padding: 2px 5px;
+          font-size: 16px;
+        }
+
+        .listEditBtn {
+          background-color: rgb(90, 188, 94);
+          color: #ffffff;
+        }
+      }
+
+      .isCompleted {
+        text-decoration: line-through;
+        color: rgb(121, 120, 120);
+      }
+    }
+  }
+}

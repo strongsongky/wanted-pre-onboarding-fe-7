@@ -1,0 +1,85 @@
+html {
+  background: url("https://i.pinimg.com/564x/50/01/e6/5001e65a360c408ade454e68516da164.jpg")
+    no-repeat 50% 50% fixed;
+  background-size: cover;
+}
+
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 15px;
+  margin: 300px auto;
+  width: 500px;
+  height: 600px;
+  border: 1px solid rgb(229, 229, 229);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  h1 {
+    text-align: center;
+    font-size: 45px;
+    font-weight: bold;
+    margin: 80px 0 40px;
+  }
+
+  .authForm {
+    display: flex;
+    flex-direction: column;
+    width: 55%;
+    margin: 30px auto;
+    font-size: 20px;
+
+    .authItem {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+
+      label {
+        margin-bottom: 5px;
+      }
+
+      input {
+        height: 50px;
+        padding: 5px 0 5px 10px;
+        border-radius: 5px;
+        border: 1px solid rgb(202, 201, 201);
+        font-size: 16px;
+      }
+
+      input::placeholder {
+        color: rgb(176, 174, 174);
+      }
+
+      input:focus {
+        outline: 1px solid rgb(98, 215, 102);
+      }
+    }
+
+    .loginBtn {
+      margin: 30px 0 10px 0;
+      border-radius: 13px;
+      border: none;
+      background-color: rgb(90, 188, 94);
+      height: 50px;
+      font-size: 18px;
+      color: #ffffff;
+      letter-spacing: 5px;
+      cursor: pointer;
+    }
+
+    .loginBtn:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .createAccountBtn {
+      margin: 10px 0 0 0;
+      background: none;
+      border-style: none;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}

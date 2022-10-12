@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 function App() {
   const checkToken = !!localStorage.getItem("token");
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/wanted-pre-onboarding-frontend">
       <Routes>
         <Route
           path="/"

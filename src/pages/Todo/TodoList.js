@@ -1,11 +1,19 @@
 import TodoItem from "./TodoItem";
 
-const TodoList = (props) => {
-  const todos = props.todo;
+const TodoList = ({ todo, getTodos }) => {
   return (
     <ul className="lists">
-      {todos.map((todo) => {
-        return <TodoItem todo={todo} key={todo.id} />;
+      {todo.map(({ id, todo, userId, isCompleted }) => {
+        return (
+          <TodoItem
+            todo={todo}
+            key={id}
+            id={id}
+            userId={userId}
+            isComplet={isCompleted}
+            getTodos={getTodos}
+          />
+        );
       })}
     </ul>
   );

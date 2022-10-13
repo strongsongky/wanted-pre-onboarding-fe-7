@@ -1,86 +1,79 @@
 import React, { useState } from "react";
-import { httpMethod, request } from "../utils/fetchData";
 import "./todo.scss";
 
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo, id, isComplet, getTodos }) => {
   const userToken = localStorage.getItem("token");
-  const [todoList, setTodoList] = useState(todo);
   const [pressUpdateTodo, setPressUpdateTodo] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(todo.isCompleted);
-  const [updateTodo, setUpdateTodo] = useState(todo.todo);
+  const [isCompleted, setIsCompleted] = useState(isComplet);
+  const [updateTodo, setUpdateTodo] = useState(todo);
 
   const btnUIHandler = () => {
     setPressUpdateTodo((current) => !current);
+    setUpdateTodo(todo);
   };
 
   const inputTodoHandler = (e) => {
     setUpdateTodo(e.target.value);
   };
 
-  const submitTodoHandler = async (e) => {
-    const todoId = e.target.name;
+  const submitTodoHandler = (e) => {
     const updatedTodoData = {
       todo: updateTodo,
       isCompleted: isCompleted,
     };
-    const res = await request(
-      `todos/${todoId}`,
-      httpMethod.put,
-      {
+    fetch(`https://pre-onboarding-selection-task.shop/todos/${id}`, {
+      method: "PUT",
+      headers: {
         Authorization: `Bearer ${userToken}`,
         "Content-Type": "application/json",
       },
-      updatedTodoData
-    );
-    if (res.ok) {
-      setTodoList((prevState) => {
-        return {
-          ...prevState,
-          todo: updateTodo,
-        };
-      });
-      setPressUpdateTodo(false);
-    }
-  };
-
-  const isCompletedHandler = async (e) => {
-    const todoId = await e.target.name;
-    const updatedTodoData = {
-      todo: todo.todo,
-      isCompleted: !todo.isCompleted,
-    };
-    const res = await request(
-      `todos/${todoId}`,
-      httpMethod.put,
-      {
-        Authorization: `Bearer ${userToken}`,
-        "Content-Type": "application/json",
-      },
-      updatedTodoData
-    );
-    if (res.ok) {
-      setIsCompleted((current) => !current);
-    }
-  };
-
-  const deleteTodoHandler = async (e) => {
-    const todoId = e.target.name;
-    const res = await request(`todos/${todoId}`, httpMethod.delete, {
-      Authorization: `Bearer ${userToken}`,
+      body: JSON.stringify(updatedTodoData),
     });
-    if (res.ok) {
-      setTodoList({ id: 0 });
-    }
+
+    setTimeout(() => {
+      getTodos();
+      setPressUpdateTodo(false);
+    }, 200);
   };
 
-  if (todoList.id === 0) {
-    return null;
-  }
+  const isCompletedHandler = () => {
+    const updatedTodoData = {
+      todo: todo,
+      isCompleted: !isCompleted,
+    };
+
+    fetch(`https://pre-onboarding-selection-task.shop/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedTodoData),
+    });
+
+    setTimeout(() => {
+      getTodos();
+      setPressUpdateTodo(false);
+      setIsCompleted((prev) => !prev);
+    }, 200);
+  };
+
+  const deleteTodoHandler = () => {
+    fetch(`https://pre-onboarding-selection-task.shop/todos/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    });
+
+    setTimeout(() => {
+      getTodos();
+    }, 200);
+  };
 
   return (
     <div className="list">
       <input
-        name={todo.id}
         type="checkbox"
         checked={isCompleted}
         onChange={isCompletedHandler}
@@ -95,11 +88,7 @@ const TodoItem = ({ todo }) => {
       <div className="listBtns">
         {pressUpdateTodo ? (
           <>
-            <button
-              name={todo.id}
-              onClick={submitTodoHandler}
-              className="listEditBtn"
-            >
+            <button onClick={submitTodoHandler} className="listEditBtn">
               제출
             </button>
             <button onClick={btnUIHandler} className="listDeletetBtn">
@@ -111,11 +100,7 @@ const TodoItem = ({ todo }) => {
             <button onClick={btnUIHandler} className="listEditBtn">
               수정
             </button>
-            <button
-              name={todo.id}
-              onClick={deleteTodoHandler}
-              className="listDeletetBtn"
-            >
+            <button onClick={deleteTodoHandler} className="listDeletetBtn">
               삭제
             </button>
           </>

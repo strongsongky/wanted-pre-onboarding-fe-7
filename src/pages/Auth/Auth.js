@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.scss";
-import { httpMethod, request } from "../utils/fetchData";
 
 export default function Auth() {
   const [inputEmail, setInputEmail] = useState("");
@@ -32,54 +31,52 @@ export default function Auth() {
     }
   }, [enteredEmailIsValid, enteredPasswordIsValid]);
 
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    const submittedData = {
-      email: inputEmail,
-      password: inputPassword,
-    };
 
     if (isLogin) {
-      const res = await request(
-        "auth/signin",
-        httpMethod.post,
-        {
-          "Content-Type": "application/json",
-        },
-        submittedData
-      );
-      const data = await res.json();
-      if (data.statusCode === 404) {
-        return alert(data.message);
-      }
-      if (data.statusCode === 401) {
-        return alert("입력정보를 확인해주세요");
-      }
-      if (data.access_token) {
-        localStorage.setItem("token", data.access_token);
-        alert("환영합니다 🎉");
-        navigate(0);
-      }
+      fetch("https://pre-onboarding-selection-task.shop/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: inputEmail,
+          password: inputPassword,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.statusCode === 404) {
+            return alert("페이지 오류입니다. 잠시 후 다시 시도해주세요");
+          } else if (data.statusCode === 401) {
+            return alert("입력정보를 확인해주세요");
+          } else if (data.access_token) {
+            localStorage.setItem("token", data.access_token);
+            alert("환영합니다 🎉");
+            navigate(0);
+          }
+        });
     }
 
     if (!isLogin) {
-      const res = await request(
-        "auth/signup",
-        httpMethod.post,
-        {
-          "Content-Type": "application/json",
-        },
-        submittedData
-      );
-      const data = await res.json();
-      if (data.statusCode === 400) {
-        return alert(data.message);
-      }
-      if (data.access_token) {
-        alert("회원가입 되었습니다 🎉 로그인 해주세요");
-        navigate(0);
-        return;
-      }
+      fetch("https://pre-onboarding-selection-task.shop/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: inputEmail,
+          password: inputPassword,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.statusCode === 400) {
+            return alert(data.message);
+          }
+          if (data.access_token) {
+            alert("회원가입 되었습니다 🎉 로그인 해주세요");
+            navigate(0);
+            return;
+          }
+        });
     }
   };
 

@@ -1,38 +1,36 @@
 import React, { useState } from "react";
-import { httpMethod, request } from "../utils/fetchData";
 import "./todo.scss";
 
-const CreateTodo = (props) => {
+const CreateTodo = ({ id, userId, isCompleted, getTodos }) => {
   const [getTodo, setGetTodo] = useState("");
-  const access_token = localStorage.getItem("token");
+
   const getTodoDataHandler = (e) => {
     setGetTodo(e.target.value);
   };
 
-  const toDoSubmitHandler = async (e) => {
+  const toDoSubmitHandler = (e) => {
+    const access_token = localStorage.getItem("token");
     e.preventDefault();
 
-    const enteredTodo = getTodo;
-
-    if (enteredTodo.trim().length === 0) {
+    if (getTodo.trim().length === 0) {
       return alert("내용을 입력해주세요");
     }
 
     const todoData = {
-      todo: enteredTodo,
+      todo: getTodo,
     };
-    const res = await request(
-      "todos",
-      httpMethod.post,
-      {
+    fetch("https://pre-onboarding-selection-task.shop/todos", {
+      method: "POST",
+      headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${access_token}`,
       },
-      todoData
-    );
-    const data = await res.json();
-    props.onSaveTodoData(data.todo, data.userId, data.id, data.isCompleted);
-    return setGetTodo("");
+      body: JSON.stringify(todoData),
+    });
+    setTimeout(() => {
+      getTodos();
+      setGetTodo("");
+    }, 200);
   };
 
   return (
